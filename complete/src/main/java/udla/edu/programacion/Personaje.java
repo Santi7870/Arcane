@@ -16,13 +16,13 @@ public abstract class Personaje {
     private String ciudad;
     private String habilidades;
 
-    @OneToMany(mappedBy = "origen", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "origen", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Vinculo> vinculos = new ArrayList<>();
 
-    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Afiliacion> afiliaciones = new ArrayList<>();
 
-    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "personaje", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UsoTecnologia> tecnologias = new ArrayList<>();
 
     // Getters y Setters

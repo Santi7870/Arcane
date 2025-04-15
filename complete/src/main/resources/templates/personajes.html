@@ -2,211 +2,116 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Arcane - Personajes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Personajes de Arcane</title>
     <style>
-        :root {
-            --piltover-gold: #F5C451;
-            --zaun-purple: #7D4EFF;
-            --bg-dark: #1A1A2E;
-            --bg-card: #16213E;
-            --text-light: #E6E6E6;
-            --text-accent: #FF4D4D;
-        }
-
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            margin: 0;
+            background-color: #0f0c29;
+            color: #f5f5f5;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            background-image: radial-gradient(circle at 10% 20%, rgba(125, 78, 255, 0.1) 0%, transparent 20%),
-                              radial-gradient(circle at 90% 80%, rgba(245, 196, 81, 0.1) 0%, transparent 20%);
+            line-height: 1.6;
         }
-
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--piltover-gold);
+            color: #f5c451;
             text-align: center;
-            font-size: 3rem;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(245, 196, 81, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .characters-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
-            padding: 20px;
-        }
-
-        .character-card {
-            background: var(--bg-card);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 3px solid var(--piltover-gold);
-            position: relative;
-        }
-
-        .character-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-        }
-
-        .character-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(245, 196, 81, 0.2);
-        }
-
-        .character-name {
+            border-bottom: 2px solid #7d4eff;
+            padding-bottom: 10px;
             font-family: 'Orbitron', sans-serif;
-            color: var(--piltover-gold);
-            margin: 0;
-            font-size: 1.8rem;
             letter-spacing: 1px;
         }
-
-        .character-city {
-            display: inline-block;
-            margin-top: 8px;
-            font-size: 1.1rem;
-            color: var(--text-light);
+        .personaje {
+            background-color: #1a1a2e;
+            border-left: 4px solid #f5c451;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
         }
-
-        .character-type {
+        .personaje.zaun {
+            border-left-color: #7d4eff;
+        }
+        h2 {
+            color: #f5c451;
+            margin-top: 0;
+        }
+        .zaun h2 {
+            color: #7d4eff;
+        }
+        .tipo {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
+            font-size: 0.8em;
             margin-left: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background-color: #f5c451;
+            color: #0f0c29;
         }
-
-        .defensor {
-            background-color: rgba(245, 196, 81, 0.2);
-            color: var(--piltover-gold);
-            border: 1px solid var(--piltover-gold);
+        .zaun .tipo {
+            background-color: #7d4eff;
         }
-
-        .rebelde {
-            background-color: rgba(125, 78, 255, 0.2);
-            color: var(--zaun-purple);
-            border: 1px solid var(--zaun-purple);
+        .seccion {
+            margin-top: 15px;
         }
-
-        .character-details {
-            padding: 20px;
-        }
-
-        .section-title {
-            color: var(--piltover-gold);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(245, 196, 81, 0.3);
+        .seccion h3 {
+            color: #f5c451;
+            border-bottom: 1px solid #f5c451;
             padding-bottom: 5px;
+            font-size: 1.1em;
         }
-
-        .affiliation-list, .tech-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .zaun .seccion h3 {
+            color: #7d4eff;
+            border-bottom-color: #7d4eff;
         }
-
-        .affiliation-item, .tech-item {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
+        ul {
+            padding-left: 20px;
         }
-
-        .tech-name {
-            color: var(--text-light);
+        li {
+            margin-bottom: 5px;
         }
-
-        .restricted {
-            color: var(--text-accent);
+        .tecnologia {
             font-weight: bold;
-            animation: pulse 2s infinite;
         }
-
-        @keyframes pulse {
-            0% { opacity: 0.8; }
-            50% { opacity: 1; text-shadow: 0 0 8px var(--text-accent); }
-            100% { opacity: 0.8; }
+        .restringida {
+            color: #ff4d4d;
         }
-
-        .inactive {
-            color: #888;
+        .afiliacion {
             font-style: italic;
         }
-
-        .city-icon {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .piltover-icon {
-            background-color: var(--piltover-gold);
-            border-radius: 50%;
-        }
-
-        .zaun-icon {
-            background-color: var(--zaun-purple);
-            border-radius: 2px;
-        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <h1>PERSONAJES DE ARCANE</h1>
 
-<div class="characters-container">
-    <div th:each="personaje : ${personajes}" class="character-card">
-        <div class="character-header">
-            <h2 class="character-name" th:text="${personaje.nombre}"></h2>
-            <div>
-                    <span class="character-city">
-                        <span th:classappend="${personaje.ciudad == 'Piltover'} ? 'piltover-icon' : 'zaun-icon'"
-                              class="city-icon"></span>
-                        <span th:text="${personaje.ciudad}"></span>
-                    </span>
-                <span th:classappend="${personaje.class.simpleName == 'Defensor'} ? 'character-type defensor' : 'character-type rebelde'"
-                      th:text="${#strings.capitalize(personaje.class.simpleName.toLowerCase())}"></span>
-            </div>
-        </div>
+<div th:each="personaje : ${personajes}"
+     th:class="${personaje.ciudad == 'Piltover'} ? 'personaje' : 'personaje zaun'">
+    <h2 th:text="${personaje.nombre}">
+            <span class="tipo"
+                  th:text="${#strings.capitalize(personaje.class.simpleName.toLowerCase())}"></span>
+    </h2>
+    <p th:text="${personaje.ciudad}"></p>
 
-        <div class="character-details">
-            <div th:if="${!personaje.afiliaciones.isEmpty()}">
-                <h3 class="section-title">AFILIACIONES</h3>
-                <ul class="affiliation-list">
-                    <li th:each="afiliacion : ${personaje.afiliaciones}" class="affiliation-item">
-                        <span th:text="${afiliacion.organizacion.nombre} + ' (' + ${afiliacion.rol} + ')'"></span>
-                        <span th:if="${!afiliacion.activa}" class="inactive">(Anterior)</span>
-                    </li>
-                </ul>
-            </div>
+    <div th:if="${!personaje.afiliaciones.isEmpty()}" class="seccion">
+        <h3>AFILIACIONES</h3>
+        <ul>
+            <li th:each="afiliacion : ${personaje.afiliaciones}" class="afiliacion">
+                <span th:text="${afiliacion.organizacion.nombre} + ' (' + ${afiliacion.rol} + ')'"></span>
+                <span th:if="${!afiliacion.activa}" style="color: #888;">(Pasado)</span>
+            </li>
+        </ul>
+    </div>
 
-            <div th:if="${!personaje.tecnologias.isEmpty()}">
-                <h3 class="section-title">TECNOLOGÍAS</h3>
-                <ul class="tech-list">
-                    <li th:each="uso : ${personaje.tecnologias}" class="tech-item">
-                            <span th:text="${uso.tecnologia.nombre}"
-                                  th:classappend="${uso.tecnologia.restringida} ? 'tech-name restricted' : 'tech-name'"></span>
-                        <span th:if="${uso.tecnologia.restringida}" class="restricted">RESTRINGIDA</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div th:if="${!personaje.tecnologias.isEmpty()}" class="seccion">
+        <h3>TECNOLOGÍAS</h3>
+        <ul>
+            <li th:each="uso : ${personaje.tecnologias}">
+                    <span th:text="${uso.tecnologia.nombre}" class="tecnologia"
+                          th:classappend="${uso.tecnologia.restringida} ? 'restringida'"></span>
+                <span th:if="${uso.tecnologia.restringida}"> (RESTRINGIDA)</span>
+                <span th:text="' - ' + ${uso.proposito}" style="color: #aaa;"></span>
+            </li>
+        </ul>
     </div>
 </div>
 </body>
