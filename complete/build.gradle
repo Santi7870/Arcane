@@ -1,0 +1,41 @@
+plugins {
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '21'  // Cambiado a Java 21 para coincidir con tu JDK
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Dependencias básicas para tu aplicación web
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Para persistencia de datos (JPA + H2)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'com.h2database:h2'
+
+	// Para desarrollo (opcional pero útil)
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// Para testing
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // ¡Esta es crucial!
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		runtimeOnly 'com.h2database:h2'
+
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

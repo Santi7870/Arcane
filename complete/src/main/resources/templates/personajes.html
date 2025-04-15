@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Personajes de Arcane</title>
+    <style>
+        .personaje-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Personajes</h1>
+<div th:each="p : ${personajes}">
+    <div class="personaje-card">
+        <h2 th:text="${p.nombre}"></h2>
+        <p>Ciudad: <span th:text="${p.ciudad}"></span></p>
+        <div th:if="${!p.afiliaciones.empty}">
+            <h3>Afiliaciones:</h3>
+            <div th:each="afiliacion : ${p.afiliaciones}">
+                <p th:text="${afiliacion.organizacion.nombre + ' (' + afiliacion.rol + ')'}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
