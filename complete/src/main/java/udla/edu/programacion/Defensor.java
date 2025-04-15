@@ -6,13 +6,11 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("DEFENSOR")
 public class Defensor extends Personaje {
-    public Defensor() {
-        super();
-    }
+    private String rango;
+    private String departamento;
 
-    // Constructor alternativo
-    public Defensor(String nombre, String ciudad) {
-        this.setNombre(nombre);
-        this.setCiudad(ciudad);
-    }
+    public String getRango() { return rango; }
+    public void setRango(String rango) { this.rango = rango; }
+    public String getDepartamento() { return departamento; }
+    public void setDepartamento(String departamento) { this.departamento = departamento; }
 }

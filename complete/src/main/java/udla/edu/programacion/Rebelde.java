@@ -6,14 +6,12 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("REBELDE")
 public class Rebelde extends Personaje {
-    public Rebelde() {
-        super();
-    }
+    private String motivo;
+    private String grupo;
 
-    // Constructor alternativo
-    public Rebelde(String nombre, String ciudad) {
-        this.setNombre(nombre);
-        this.setCiudad(ciudad);
-    }
+    public String getMotivo() { return motivo; }
+    public void setMotivo(String motivo) { this.motivo = motivo; }
+    public String getGrupo() { return grupo; }
+    public void setGrupo(String grupo) { this.grupo = grupo; }
 }
 
