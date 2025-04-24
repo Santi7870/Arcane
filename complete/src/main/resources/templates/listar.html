@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Personajes</title>
+</head>
+<body>
+<h1>Personajes</h1>
+<div th:each="personaje : ${personajes}">
+  <h2 th:text="${personaje.nombre}"></h2>
+  <p th:text="${personaje.ciudad}"></p>
+  <a th:href="@{/personajes/eliminar/{id}(id=${personaje.id})}">Eliminar</a>
+</div>
+<a href="/personajes/nuevo">Crear nuevo</a>
+</body>
+</html>

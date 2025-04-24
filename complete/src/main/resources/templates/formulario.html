@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario</title>
+</head>
+<body>
+<form action="/personajes/guardar" method="post">
+  Nombre: <input type="text" name="nombre" required><br>
+  Ciudad:
+  <select name="ciudad">
+    <option value="Piltover">Piltover</option>
+    <option value="Zaun">Zaun</option>
+  </select><br>
+  Tipo:
+  <select name="tipoPersonaje">
+    <option value="DEFENSOR">Defensor</option>
+    <option value="REBELDE">Rebelde</option>
+  </select><br>
+  <div id="defensorFields">
+    Rango: <input type="text" name="rango"><br>
+  </div>
+  <div id="rebeldeFields" style="display:none">
+    Motivo: <input type="text" name="motivo"><br>
+  </div>
+  <button type="submit">Guardar</button>
+</form>
+
+<script>
+  document.querySelector('[name="tipoPersonaje"]').addEventListener('change', function() {
+      const tipo = this.value;
+      document.getElementById('defensorFields').style.display =
+          tipo === 'DEFENSOR' ? 'block' : 'none';
+      document.getElementById('rebeldeFields').style.display =
+          tipo === 'REBELDE' ? 'block' : 'none';
+  });
+</script>
+</body>
+</html>
