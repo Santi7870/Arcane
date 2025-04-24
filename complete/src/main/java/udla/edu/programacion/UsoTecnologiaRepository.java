@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UsoTecnologiaRepository extends JpaRepository<UsoTecnologia, Long> {
 
+
+
     // Método para buscar por personaje
     List<UsoTecnologia> findByPersonajeId(Long personajeId);
 
@@ -16,5 +18,7 @@ public interface UsoTecnologiaRepository extends JpaRepository<UsoTecnologia, Lo
 
     // Método para verificar si ya existe una relación
     boolean existsByPersonajeAndTecnologia(Personaje personaje, Tecnologia tecnologia);
+
+
 }
 

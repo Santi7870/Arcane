@@ -2,59 +2,198 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title th:text="${personaje.id} ? 'Editar Personaje' : 'Nuevo Personaje'"></title>
+  <title th:text="${personaje.id} ? 'Editar ' + ${personaje.nombre} : 'Nuevo Personaje'"></title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    form div { margin: 10px 0; }
-    label { display: inline-block; width: 120px; }
+    :root {
+        --piltover-gold: #f5c451;
+        --zaun-purple: #7d4eff;
+        --dark-bg: #0f0c29;
+        --darker-bg: #0a081f;
+        --text-light: #f5f5f5;
+    }
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f0c29 100%);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem;
+    }
+    .hextech-form {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(26, 26, 46, 0.8);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 0 30px rgba(125, 78, 255, 0.2);
+        border: 1px solid rgba(125, 78, 255, 0.3);
+    }
+    h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--piltover-gold);
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    h1::after {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--piltover-gold), var(--zaun-purple));
+        margin: 0.5rem auto 0;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--piltover-gold);
+        font-weight: 500;
+    }
+    input[type="text"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.8rem;
+        background: rgba(15, 12, 41, 0.7);
+        border: 1px solid rgba(125, 78, 255, 0.5);
+        border-radius: 5px;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        transition: all 0.3s ease;
+    }
+    input[type="text"]:focus,
+    select:focus {
+        outline: none;
+        border-color: var(--piltover-gold);
+        box-shadow: 0 0 0 2px rgba(245, 196, 81, 0.3);
+    }
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+        grid-column: 1 / -1;
+    }
+    .btn {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 50px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        letter-spacing: 1px;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--piltover-gold), #e6b31e);
+        color: var(--dark-bg);
+    }
+    .btn-secondary {
+        background: transparent;
+        color: var(--piltover-gold);
+        border: 2px solid var(--piltover-gold);
+    }
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(245, 196, 81, 0.4);
+    }
+    .type-fields {
+        grid-column: 1 / -1;
+        background: rgba(15, 12, 41, 0.5);
+        padding: 1.5rem;
+        border-radius: 10px;
+        border-left: 4px solid var(--zaun-purple);
+        margin-top: 1rem;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .logo img {
+        height: 60px;
+        filter: drop-shadow(0 0 5px rgba(245, 196, 81, 0.7));
+    }
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
   </style>
 </head>
 <body>
-<h1 th:text="${personaje.id} ? 'Editar Personaje' : 'Nuevo Personaje'"></h1>
-
-<form action="/personajes/guardar" method="post">
-  <input type="hidden" name="id" th:value="${personaje.id}">
-
-  <div>
-    <label>Nombre:</label>
-    <input type="text" name="nombre" th:value="${personaje.nombre}" required>
+<div class="hextech-form">
+  <div class="logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arcane_2021_logo.svg/1200px-Arcane_2021_logo.svg.png" alt="Arcane Logo">
   </div>
+  <h1 th:text="${personaje.id} ? 'EDITAR PERSONAJE' : 'NUEVO PERSONAJE'"></h1>
 
-  <div>
-    <label>Ciudad:</label>
-    <select name="ciudad">
-      <option value="Piltover" th:selected="${personaje.ciudad == 'Piltover'}">Piltover</option>
-      <option value="Zaun" th:selected="${personaje.ciudad == 'Zaun'}">Zaun</option>
-    </select>
-  </div>
+  <form action="/personajes/guardar" method="post" class="form-grid">
+    <input type="hidden" name="id" th:value="${personaje.id}">
 
-  <div>
-    <label>Tipo:</label>
-    <select name="tipoPersonaje" id="tipoPersonaje" onchange="mostrarCampos()">
-      <option value="DEFENSOR" th:selected="${personaje instanceof T(udla.edu.programacion.Defensor)}">Defensor</option>
-      <option value="REBELDE" th:selected="${personaje instanceof T(udla.edu.programacion.Rebelde)}">Rebelde</option>
-    </select>
-  </div>
+    <div class="form-group">
+      <label for="nombre">NOMBRE</label>
+      <input type="text" id="nombre" name="nombre" th:value="${personaje.nombre}" required>
+    </div>
 
-  <div id="defensorFields" th:style="${personaje instanceof T(udla.edu.programacion.Defensor)} ? 'display:block' : 'display:none'">
-    <label>Rango:</label>
-    <input type="text" name="rango" th:value="${personaje instanceof T(udla.edu.programacion.Defensor)} ? ${personaje.rango} : ''">
-  </div>
+    <div class="form-group">
+      <label for="ciudad">CIUDAD</label>
+      <select id="ciudad" name="ciudad">
+        <option value="Piltover" th:selected="${personaje.ciudad == 'Piltover'}">PILTOVER</option>
+        <option value="Zaun" th:selected="${personaje.ciudad == 'Zaun'}">ZAUN</option>
+      </select>
+    </div>
 
-  <div id="rebeldeFields" th:style="${personaje instanceof T(udla.edu.programacion.Rebelde)} ? 'display:block' : 'display:none'">
-    <label>Motivo:</label>
-    <input type="text" name="motivo" th:value="${personaje instanceof T(udla.edu.programacion.Rebelde)} ? ${personaje.motivo} : ''">
-  </div>
+    <div class="form-group">
+      <label for="tipoPersonaje">TIPO</label>
+      <select id="tipoPersonaje" name="tipoPersonaje" onchange="mostrarCampos()">
+        <option value="DEFENSOR" th:selected="${personaje instanceof T(udla.edu.programacion.Defensor)}">DEFENSOR</option>
+        <option value="REBELDE" th:selected="${personaje instanceof T(udla.edu.programacion.Rebelde)}">REBELDE</option>
+      </select>
+    </div>
 
-  <button type="submit">Guardar</button>
-  <a href="/personajes">Cancelar</a>
-</form>
+    <div id="defensorFields" class="type-fields" th:style="${personaje instanceof T(udla.edu.programacion.Defensor)} ? 'display: block' : 'display: none'">
+      <div class="form-group">
+        <label for="rango">RANGO</label>
+        <input type="text" id="rango" name="rango" th:value="${personaje instanceof T(udla.edu.programacion.Defensor)} ? ${personaje.rango} : ''">
+      </div>
+    </div>
+
+    <div id="rebeldeFields" class="type-fields" th:style="${personaje instanceof T(udla.edu.programacion.Rebelde)} ? 'display: block' : 'display: none'">
+      <div class="form-group">
+        <label for="motivo">MOTIVO</label>
+        <input type="text" id="motivo" name="motivo" th:value="${personaje instanceof T(udla.edu.programacion.Rebelde)} ? ${personaje.motivo} : ''">
+      </div>
+    </div>
+
+    <div class="btn-container">
+      <button type="submit" class="btn btn-primary">GUARDAR</button>
+      <a href="/personajes" class="btn btn-secondary">CANCELAR</a>
+    </div>
+  </form>
+</div>
 
 <script>
   function mostrarCampos() {
       const tipo = document.getElementById('tipoPersonaje').value;
       document.getElementById('defensorFields').style.display = tipo === 'DEFENSOR' ? 'block' : 'none';
       document.getElementById('rebeldeFields').style.display = tipo === 'REBELDE' ? 'block' : 'none';
+
+      // Animación
+      const fields = tipo === 'DEFENSOR' ? document.getElementById('defensorFields') : document.getElementById('rebeldeFields');
+      fields.style.opacity = '0';
+      fields.style.transition = 'opacity 0.3s ease';
+      setTimeout(() => {
+          fields.style.opacity = '1';
+      }, 10);
   }
 </script>
 </body>

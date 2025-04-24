@@ -3,26 +3,249 @@
 <head>
   <meta charset="UTF-8">
   <title>Personajes de Arcane</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .personaje { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
-    .acciones a { margin-right: 10px; }
+    :root {
+        --piltover-gold: #f5c451;
+        --zaun-purple: #7d4eff;
+        --dark-bg: #0f0c29;
+        --darker-bg: #0a081f;
+        --text-light: #f5f5f5;
+    }
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f0c29 100%);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+        margin: 0;
+        padding: 2rem;
+    }
+    .header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    .header h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--piltover-gold);
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(245, 196, 81, 0.5);
+    }
+    .header p {
+        color: rgba(245, 245, 245, 0.7);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .header::after {
+        content: '';
+        display: block;
+        width: 150px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--piltover-gold), var(--zaun-purple));
+        margin: 1rem auto;
+    }
+    .btn-create {
+        display: inline-block;
+        padding: 0.8rem 2rem;
+        background: linear-gradient(135deg, var(--piltover-gold), #e6b31e);
+        color: var(--dark-bg);
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+    .btn-create:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(245, 196, 81, 0.3);
+    }
+    .characters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    .character-card {
+        background: rgba(26, 26, 46, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        border-left: 5px solid var(--piltover-gold);
+    }
+    .character-card.zaun {
+        border-left-color: var(--zaun-purple);
+    }
+    .character-header {
+        padding: 1.5rem;
+        position: relative;
+    }
+    .character-header h2 {
+        font-family: 'Orbitron', sans-serif;
+        margin: 0;
+        color: var(--piltover-gold);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .character-card.zaun .character-header h2 {
+        color: var(--zaun-purple);
+    }
+    .character-type {
+        background: var(--piltover-gold);
+        color: var(--dark-bg);
+        padding: 0.2rem 0.8rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+    .character-card.zaun .character-type {
+        background: var(--zaun-purple);
+        color: white;
+    }
+    .character-city {
+        color: rgba(245, 245, 245, 0.7);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    .character-details {
+        padding: 0 1.5rem 1.5rem;
+    }
+    .character-section {
+        margin-top: 1rem;
+    }
+    .character-section h3 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1rem;
+        color: var(--piltover-gold);
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(125, 78, 255, 0.3);
+        padding-bottom: 0.3rem;
+    }
+    .character-card.zaun .character-section h3 {
+        color: var(--zaun-purple);
+    }
+    .character-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .character-list li {
+        padding: 0.3rem 0;
+        display: flex;
+        align-items: center;
+    }
+    .character-list li::before {
+        content: '•';
+        color: var(--piltover-gold);
+        margin-right: 0.5rem;
+    }
+    .character-card.zaun .character-list li::before {
+        color: var(--zaun-purple);
+    }
+    .character-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(125, 78, 255, 0.2);
+    }
+    .action-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .action-btn.delete {
+        background: rgba(255, 77, 77, 0.2);
+        color: #ff4d4d;
+        border: 1px solid rgba(255, 77, 77, 0.5);
+    }
+    .action-btn.edit {
+        background: rgba(125, 78, 255, 0.2);
+        color: var(--zaun-purple);
+        border: 1px solid rgba(125, 78, 255, 0.5);
+    }
+    .action-btn.relations {
+        background: rgba(245, 196, 81, 0.2);
+        color: var(--piltover-gold);
+        border: 1px solid rgba(245, 196, 81, 0.5);
+    }
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .logo img {
+        height: 80px;
+        filter: drop-shadow(0 0 10px rgba(245, 196, 81, 0.7));
+    }
   </style>
 </head>
 <body>
-<h1>Personajes de Arcane</h1>
-<a href="/personajes/nuevo">Crear Nuevo Personaje</a>
+<div class="logo">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arcane_2021_logo.svg/1200px-Arcane_2021_logo.svg.png" alt="Arcane Logo">
+</div>
 
-<div th:each="personaje : ${personajes}" class="personaje">
-  <h2 th:text="${personaje.nombre}"></h2>
-  <p th:text="${personaje.ciudad}"></p>
-  <p th:text="${personaje.getClass().getSimpleName()}"></p>
+<div class="header">
+  <h1>PERSONAJES DE ARCANE</h1>
+  <p>Explora y gestiona los personajes de Piltover y Zaun</p>
+</div>
 
-  <div class="acciones">
-    <a th:href="@{/personajes/eliminar/{id}(id=${personaje.id})}">Eliminar</a>
-    <a th:href="@{/personajes/{id}/relaciones(id=${personaje.id})}">Relaciones</a>
-    <a th:href="@{/personajes/{id}/tecnologias(id=${personaje.id})}">Tecnologías</a>
-    <a th:href="@{/personajes/{id}/vinculos(id=${personaje.id})}">Vínculos</a>
+<div class="container">
+  <a href="/personajes/nuevo" class="btn-create">CREAR NUEVO PERSONAJE</a>
+
+  <div class="characters-grid">
+    <div th:each="personaje : ${personajes}"
+         th:class="${personaje.ciudad == 'Piltover'} ? 'character-card' : 'character-card zaun'">
+      <div class="character-header">
+        <h2>
+          <span th:text="${personaje.nombre}"></span>
+          <span class="character-type"
+                th:text="${#strings.capitalize(personaje.class.simpleName.toLowerCase())}"></span>
+        </h2>
+        <div class="character-city" th:text="${personaje.ciudad}"></div>
+      </div>
+
+      <div class="character-details">
+        <div th:if="${!personaje.afiliaciones.isEmpty()}" class="character-section">
+          <h3>AFILIACIONES</h3>
+          <ul class="character-list">
+            <li th:each="afiliacion : ${personaje.afiliaciones}">
+              <span th:text="${afiliacion.organizacion.nombre} + ' (' + ${afiliacion.rol} + ')'"></span>
+              <span th:if="${!afiliacion.activa}" style="color: #888; font-size: 0.8rem;"> (Pasado)</span>
+            </li>
+          </ul>
+        </div>
+
+        <div th:if="${!personaje.tecnologias.isEmpty()}" class="character-section">
+          <h3>TECNOLOGÍAS</h3>
+          <ul class="character-list">
+            <li th:each="uso : ${personaje.tecnologias}">
+                                <span th:text="${uso.tecnologia.nombre}"
+                                      th:style="${uso.tecnologia.restringida} ? 'color: #ff4d4d; font-weight: bold;' : ''"></span>
+              <span th:text="' - ' + ${uso.proposito}" style="color: #aaa; font-size: 0.8rem;"></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="character-actions">
+          <a th:href="@{/personajes/eliminar/{id}(id=${personaje.id})}"
+             class="action-btn delete">ELIMINAR</a>
+          <a th:href="@{/personajes/{id}/relaciones(id=${personaje.id})}"
+             class="action-btn relations">RELACIONES</a>
+          <a th:href="@{/personajes/{id}/tecnologias(id=${personaje.id})}"
+             class="action-btn edit">TECNOLOGÍAS</a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </body>

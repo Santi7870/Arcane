@@ -141,30 +141,54 @@ public class PersonajeController {
     }
 
     @GetMapping("/personajes/{id}/tecnologias/asignar")
-    public String asignarTecnologia(@PathVariable Long id, Model model) {
-        Personaje personaje = personajeRepo.findById(id).orElseThrow();
-        model.addAttribute("personaje", personaje);
-        model.addAttribute("tecnologiasDisponibles", tecnologiaRepo.findAll());
-        model.addAttribute("uso", new UsoTecnologia());
-        return "formulario-tecnologia";
+    public String asignarTecnologiaForm(@PathVariable Long id, Model model) {
+        try {
+            // Verificar si el personaje existe
+            if (!personajeRepo.existsById(id)) {
+                return "redirect:/personajes?error=Personaje+no+encontrado";
+            }
+
+            // Obtener tecnologías no asignadas
+            List<Tecnologia> tecnologiasDisponibles = tecnologiaRepo.findTecnologiasNoAsignadas(id);
+
+            // Para debug - verifica en consola
+            System.out.println("Tecnologías disponibles para personaje ID " + id + ": " +
+                    tecnologiasDisponibles.size());
+
+            model.addAttribute("personaje", personajeRepo.findById(id).orElseThrow());
+            model.addAttribute("tecnologiasDisponibles", tecnologiasDisponibles);
+            return "formulario-tecnologia";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/personajes?error=Error+al+cargar+formulario";
+        }
     }
 
     @PostMapping("/personajes/{id}/tecnologias/guardar")
     public String guardarTecnologia(@PathVariable Long id,
                                     @RequestParam Long tecnologiaId,
                                     @RequestParam String proposito) {
-        Personaje personaje = personajeRepo.findById(id).orElseThrow();
-        Tecnologia tecnologia = tecnologiaRepo.findById(tecnologiaId).orElseThrow();
+        try {
+            Personaje personaje = personajeRepo.findById(id).orElseThrow();
+            Tecnologia tecnologia = tecnologiaRepo.findById(tecnologiaId).orElseThrow();
 
-        UsoTecnologia uso = new UsoTecnologia();
-        uso.setPersonaje(personaje);
-        uso.setTecnologia(tecnologia);
-        uso.setProposito(proposito);
-        usoTecnologiaRepo.save(uso);
+            // Verificar si ya existe esta relación
+            if (usoTecnologiaRepo.existsByPersonajeAndTecnologia(personaje, tecnologia)) {
+                return "redirect:/personajes/" + id + "/tecnologias/asignar?error=duplicado";
+            }
 
-        return "redirect:/personajes/" + id + "/tecnologias";
+            UsoTecnologia uso = new UsoTecnologia();
+            uso.setPersonaje(personaje);
+            uso.setTecnologia(tecnologia);
+            uso.setProposito(proposito);
+            usoTecnologiaRepo.save(uso);
+
+            return "redirect:/personajes/" + id + "/tecnologias";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/personajes/" + id + "/tecnologias/asignar?error";
+        }
     }
-
     // ========== VÍNCULOS ==========
     @GetMapping("/personajes/{id}/vinculos")
     public String verVinculos(@PathVariable Long id, Model model) {

@@ -4,33 +4,38 @@
   <meta charset="UTF-8">
   <title>Asignar Tecnología</title>
   <style>
-    .restringida { color: red; font-weight: bold; }
+    .error-message { color: red; }
+    .tech-card { margin: 10px; padding: 10px; border: 1px solid #ddd; }
   </style>
 </head>
 <body>
-<h1>Asignar Tecnología a <span th:text="${personaje.nombre}"></span></h1>
+<div th:if="${param.error}" class="error-message">
+  <p th:text="${param.error}"></p>
+</div>
 
-<form th:action="@{/personajes/{id}/tecnologias/guardar(id=${personaje.id})}" method="post">
-  <div>
-    <label>Tecnología:</label>
-    <select name="tecnologiaId" required>
-      <option value="">Seleccione una tecnología</option>
-      <option th:each="tec : ${tecnologiasDisponibles}"
-              th:value="${tec.id}"
-              th:text="${tec.nombre} + (${tec.restringida} ? ' (RESTRINGIDA)' : '')"
-              th:class="${tec.restringida} ? 'restringida' : ''">
-      </option>
-    </select>
-  </div>
-
-  <div>
-    <label>Propósito:</label>
-    <input type="text" name="proposito" required
-           th:placeholder="Ej: Arma principal, Mejora de habilidades...">
-  </div>
-
-  <button type="submit">Asignar</button>
-  <a th:href="@{/personajes/{id}/tecnologias(id=${personaje.id})}">Cancelar</a>
-</form>
+<h1>Asignar Tecnología</h1>
+<div th:if="${tecnologiasDisponibles.empty}">
+  <p>No hay tecnologías disponibles para asignar</p>
+</div>
+<div th:unless="${tecnologiasDisponibles.empty}">
+  <form th:action="@{/personajes/{id}/tecnologias/guardar(id=${personaje.id})}" method="post">
+    <div>
+      <label>Seleccione tecnología:</label>
+      <select name="tecnologiaId" required>
+        <option value="">-- Seleccione --</option>
+        <option th:each="tec : ${tecnologiasDisponibles}"
+                th:value="${tec.id}"
+                th:text="${tec.nombre} + (${tec.restringida} ? ' (RESTRINGIDA)' : '')">
+        </option>
+      </select>
+    </div>
+    <div>
+      <label>Propósito:</label>
+      <input type="text" name="proposito" required>
+    </div>
+    <button type="submit">Asignar</button>
+  </form>
+</div>
+<a th:href="@{/personajes/{id}/tecnologias(id=${personaje.id})}">Volver</a>
 </body>
 </html>

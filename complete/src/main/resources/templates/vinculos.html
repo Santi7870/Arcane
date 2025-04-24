@@ -2,25 +2,162 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Vínculos de <span th:text="${personaje.nombre}"></span></title>
+  <title th:text="'Vínculos de ' + ${personaje.nombre}"></title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    .vinculo { border: 1px solid #eee; padding: 10px; margin: 5px 0; }
+    :root {
+        --piltover-gold: #f5c451;
+        --zaun-purple: #7d4eff;
+        --dark-bg: #0f0c29;
+        --darker-bg: #0a081f;
+        --text-light: #f5f5f5;
+        --link-blue: #4e9cff;
+    }
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f0c29 100%);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+        margin: 0;
+        padding: 2rem;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+    .header h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--piltover-gold);
+        margin: 0;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+    .header h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--piltover-gold), transparent);
+    }
+    .btn {
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        margin-right: 0.5rem;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--link-blue), #2a7ae9);
+        color: var(--text-light);
+    }
+    .btn-secondary {
+        background: transparent;
+        color: var(--piltover-gold);
+        border: 2px solid var(--piltover-gold);
+    }
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(78, 156, 255, 0.3);
+    }
+    .vinculos-container {
+        background: rgba(26, 26, 46, 0.8);
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .vinculo-card {
+        background: rgba(15, 12, 41, 0.5);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid var(--link-blue);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    .vinculo-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(78, 156, 255, 0.2);
+    }
+    .vinculo-type {
+        display: inline-block;
+        background: rgba(78, 156, 255, 0.2);
+        color: var(--link-blue);
+        padding: 0.3rem 0.8rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 0.8rem;
+    }
+    .vinculo-content {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .vinculo-character {
+        color: var(--piltover-gold);
+        font-weight: bold;
+    }
+    .vinculo-separator {
+        color: var(--link-blue);
+        margin: 0 0.5rem;
+    }
+    .vinculo-desc {
+        color: rgba(245, 245, 245, 0.7);
+        line-height: 1.5;
+        padding-top: 0.5rem;
+        border-top: 1px solid rgba(78, 156, 255, 0.2);
+        margin-top: 0.8rem;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: rgba(245, 245, 245, 0.5);
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .logo img {
+        height: 60px;
+        filter: drop-shadow(0 0 10px rgba(245, 196, 81, 0.7));
+    }
   </style>
 </head>
 <body>
-<h1>Vínculos de <span th:text="${personaje.nombre}"></span></h1>
-<a th:href="@{/personajes/{id}/vinculos/nuevo(id=${personaje.id})}">Nuevo Vínculo</a>
-<a href="/personajes">Volver</a>
+<div class="logo">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arcane_2021_logo.svg/1200px-Arcane_2021_logo.svg.png" alt="Arcane Logo">
+</div>
 
-<div th:each="vinculo : ${vinculos}" class="vinculo">
-  <p>
-            <span th:text="${vinculo.origen.id == personaje.id} ?
-                          ${vinculo.destino.nombre} : ${vinculo.origen.nombre}"></span>
-    -
-    <span th:text="${vinculo.tipo}"></span>
-    <br>
-    <span th:text="${vinculo.descripcion}"></span>
-  </p>
+<div class="vinculos-container">
+  <div class="header">
+    <h1 th:text="'VÍNCULOS DE ' + ${personaje.nombre}"></h1>
+    <div>
+      <a th:href="@{/personajes/{id}/vinculos/nuevo(id=${personaje.id})}" class="btn btn-primary">NUEVO VÍNCULO</a>
+      <a th:href="@{/personajes}" class="btn btn-secondary">VOLVER</a>
+    </div>
+  </div>
+
+  <div th:if="${vinculos.empty}" class="empty-state">
+    <p>No se han encontrado vínculos para este personaje</p>
+  </div>
+
+  <div th:each="vinculo : ${vinculos}" class="vinculo-card">
+    <div class="vinculo-type" th:text="${vinculo.tipo}"></div>
+    <div class="vinculo-content">
+      <span class="vinculo-character"
+            th:text="${vinculo.origen.id == personaje.id} ?
+                     ${vinculo.destino.nombre} : ${vinculo.origen.nombre}"></span>
+      <span class="vinculo-separator">→</span>
+      <span class="vinculo-character" th:text="${personaje.nombre}"></span>
+    </div>
+    <p class="vinculo-desc" th:text="${vinculo.descripcion}"></p>
+  </div>
 </div>
 </body>
 </html>

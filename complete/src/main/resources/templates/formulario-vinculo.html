@@ -2,33 +2,225 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Nuevo Vínculo</title>
+  <title th:text="'Nuevo Vínculo para ' + ${origen.nombre}"></title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+        --piltover-gold: #f5c451;
+        --zaun-purple: #7d4eff;
+        --dark-bg: #0f0c29;
+        --darker-bg: #0a081f;
+        --text-light: #f5f5f5;
+        --input-bg: rgba(26, 26, 46, 0.8);
+        --link-blue: #4e9cff;
+    }
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #0f0c29 100%);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+        margin: 0;
+        padding: 2rem;
+    }
+    .header {
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+    }
+    .header h1 {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--piltover-gold);
+        margin: 0;
+        position: relative;
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+    .header h1::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--piltover-gold), transparent);
+    }
+    .form-container {
+        background: rgba(26, 26, 46, 0.8);
+        border-radius: 10px;
+        padding: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--link-blue);
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+    select, input, textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 5px;
+        border: 1px solid rgba(78, 156, 255, 0.3);
+        background-color: var(--input-bg);
+        color: var(--text-light);
+        font-family: 'Roboto', sans-serif;
+        transition: all 0.3s ease;
+    }
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    select:focus, input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--link-blue);
+        box-shadow: 0 0 0 2px rgba(78, 156, 255, 0.3);
+    }
+    .btn {
+        padding: 0.6rem 1.5rem;
+        border-radius: 50px;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: none;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--link-blue), #2a7ae9);
+        color: var(--text-light);
+    }
+    .btn-secondary {
+        background: transparent;
+        color: var(--piltover-gold);
+        border: 2px solid var(--piltover-gold);
+        margin-left: 0.5rem;
+    }
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(78, 156, 255, 0.3);
+    }
+    .btn-group {
+        margin-top: 2rem;
+        text-align: center;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .logo img {
+        height: 60px;
+        filter: drop-shadow(0 0 10px rgba(245, 196, 81, 0.7));
+    }
+    .connection-graphic {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1.5rem 0;
+    }
+    .character-pill {
+        background: rgba(125, 78, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        display: inline-flex;
+        align-items: center;
+    }
+    .character-pill img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        object-fit: cover;
+    }
+    .connection-arrow {
+        margin: 0 1rem;
+        color: var(--link-blue);
+        font-size: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.1); }
+        100% { opacity: 0.7; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-<h1>Nuevo Vínculo para <span th:text="${origen.nombre}"></span></h1>
+<div class="logo">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Arcane_2021_logo.svg/1200px-Arcane_2021_logo.svg.png" alt="Arcane Logo">
+</div>
 
-<form th:action="@{/personajes/{id}/vinculos/guardar(id=${origen.id})}" method="post">
-  <div>
-    <label>Personaje destino:</label>
-    <select name="destinoId">
-      <option th:each="p : ${otrosPersonajes}"
-              th:value="${p.id}"
-              th:text="${p.nombre} + ' (' + ${p.ciudad} + ')'"></option>
-    </select>
+<div class="form-container">
+  <div class="header">
+    <h1 th:text="'NUEVO VÍNCULO PARA ' + ${origen.nombre}"></h1>
   </div>
 
-  <div>
-    <label>Tipo:</label>
-    <input type="text" name="tipo" required>
-  </div>
+  <form th:action="@{/personajes/{id}/vinculos/guardar(id=${origen.id})}" method="post">
+    <div class="connection-graphic">
+      <div class="character-pill">
+        <img th:src="'https://via.placeholder.com/30/f5c451/0f0c29?text=' + ${origen.nombre.substring(0,1)}" alt="Origen">
+        <span th:text="${origen.nombre}"></span>
+      </div>
+      <div class="connection-arrow">→</div>
+      <div class="character-pill">
+        <img id="destinoPreviewImg" src="https://via.placeholder.com/30/7d4eff/ffffff?text=?" alt="Destino">
+        <span id="destinoPreviewText">Selecciona destino</span>
+      </div>
+    </div>
 
-  <div>
-    <label>Descripción:</label>
-    <textarea name="descripcion"></textarea>
-  </div>
+    <div class="form-group">
+      <label for="destinoId">Personaje Destino:</label>
+      <select id="destinoId" name="destinoId" required onchange="updateDestinoPreview()">
+        <option value="" disabled selected>Selecciona un personaje</option>
+        <option th:each="p : ${otrosPersonajes}"
+                th:value="${p.id}"
+                th:data-img="'https://via.placeholder.com/30/7d4eff/ffffff?text=' + ${p.nombre.substring(0,1)}"
+                th:data-name="${p.nombre}"
+                th:text="${p.nombre} + ' (' + ${p.ciudad} + ')'"></option>
+      </select>
+    </div>
 
-  <button type="submit">Guardar</button>
-  <a th:href="@{/personajes/{id}/vinculos(id=${origen.id})}">Cancelar</a>
-</form>
+    <div class="form-group">
+      <label for="tipo">Tipo de Vínculo:</label>
+      <input type="text" id="tipo" name="tipo" required
+             placeholder="Ej: Alianza, Rivalidad, Familiar...">
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" name="descripcion"
+                placeholder="Describe la naturaleza de este vínculo..."></textarea>
+    </div>
+
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary">CREAR VÍNCULO</button>
+      <a th:href="@{/personajes/{id}/vinculos(id=${origen.id})}" class="btn btn-secondary">CANCELAR</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  function updateDestinoPreview() {
+    const select = document.getElementById('destinoId');
+    const selectedOption = select.options[select.selectedIndex];
+    const imgPreview = document.getElementById('destinoPreviewImg');
+    const textPreview = document.getElementById('destinoPreviewText');
+
+    if (selectedOption.value) {
+      imgPreview.src = selectedOption.getAttribute('data-img');
+      textPreview.textContent = selectedOption.getAttribute('data-name');
+    } else {
+      imgPreview.src = 'https://via.placeholder.com/30/7d4eff/ffffff?text=?';
+      textPreview.textContent = 'Selecciona destino';
+    }
+  }
+</script>
 </body>
 </html>
