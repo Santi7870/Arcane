@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculos de <span th:text="${personaje.nombre}"></span></title>
+  <style>
+    .vinculo { border: 1px solid #eee; padding: 10px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+<h1>Vínculos de <span th:text="${personaje.nombre}"></span></h1>
+<a th:href="@{/personajes/{id}/vinculos/nuevo(id=${personaje.id})}">Nuevo Vínculo</a>
+<a href="/personajes">Volver</a>
+
+<div th:each="vinculo : ${vinculos}" class="vinculo">
+  <p>
+            <span th:text="${vinculo.origen.id == personaje.id} ?
+                          ${vinculo.destino.nombre} : ${vinculo.origen.nombre}"></span>
+    -
+    <span th:text="${vinculo.tipo}"></span>
+    <br>
+    <span th:text="${vinculo.descripcion}"></span>
+  </p>
+</div>
+</body>
+</html>

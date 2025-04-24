@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nueva Relación</title>
+</head>
+<body>
+<h1>Nueva Relación para <span th:text="${personaje.nombre}"></span></h1>
+
+<form th:action="@{/personajes/{id}/relaciones/guardar(id=${personaje.id})}" method="post">
+  <div>
+    <label>Personaje relacionado:</label>
+    <select name="otroId">
+      <option th:each="p : ${otrosPersonajes}"
+              th:value="${p.id}"
+              th:text="${p.nombre} + ' (' + ${p.ciudad} + ')'"></option>
+    </select>
+  </div>
+
+  <div>
+    <label>Tipo de relación:</label>
+    <input type="text" name="tipoRelacion" required>
+  </div>
+
+  <button type="submit">Guardar</button>
+  <a th:href="@{/personajes/{id}/relaciones(id=${personaje.id})}">Cancelar</a>
+</form>
+</body>
+</html>

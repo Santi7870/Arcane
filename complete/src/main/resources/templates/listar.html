@@ -2,15 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Personajes</title>
+  <title>Personajes de Arcane</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .personaje { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+    .acciones a { margin-right: 10px; }
+  </style>
 </head>
 <body>
-<h1>Personajes</h1>
-<div th:each="personaje : ${personajes}">
+<h1>Personajes de Arcane</h1>
+<a href="/personajes/nuevo">Crear Nuevo Personaje</a>
+
+<div th:each="personaje : ${personajes}" class="personaje">
   <h2 th:text="${personaje.nombre}"></h2>
   <p th:text="${personaje.ciudad}"></p>
-  <a th:href="@{/personajes/eliminar/{id}(id=${personaje.id})}">Eliminar</a>
+  <p th:text="${personaje.getClass().getSimpleName()}"></p>
+
+  <div class="acciones">
+    <a th:href="@{/personajes/eliminar/{id}(id=${personaje.id})}">Eliminar</a>
+    <a th:href="@{/personajes/{id}/relaciones(id=${personaje.id})}">Relaciones</a>
+    <a th:href="@{/personajes/{id}/tecnologias(id=${personaje.id})}">Tecnologías</a>
+    <a th:href="@{/personajes/{id}/vinculos(id=${personaje.id})}">Vínculos</a>
+  </div>
 </div>
-<a href="/personajes/nuevo">Crear nuevo</a>
 </body>
 </html>
